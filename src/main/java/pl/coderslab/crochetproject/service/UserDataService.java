@@ -14,6 +14,7 @@ import pl.coderslab.crochetproject.repository.PatternRepository;
 import pl.coderslab.crochetproject.repository.UserDataRepository;
 import pl.coderslab.crochetproject.repository.UserRepository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,10 @@ public class UserDataService {
         }
         boolean isCompleted = !userData.isCompleted();
         userData.setCompleted(isCompleted);
+        // update progress
+        boolean[] progress = deserializeProgress(userData.getProgress());
+        Arrays.fill(progress, isCompleted);
+        userData.setProgress(serializeProgress(progress));
         userDataRepository.save(userData);
         return "Pattern was marked as " + (isCompleted ? "completed" : "not completed") + " for this user";
     }
